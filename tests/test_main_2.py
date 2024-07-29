@@ -9,18 +9,28 @@ mp_drawing = mp.solutions.drawing_utils
 
 # Function to determine if the user is slouching
 def is_slouching(landmarks):
-    # Get the landmarks for shoulders and hips
+    # Get the landmarks for shoulders and neck
     left_shoulder = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value]
     right_shoulder = landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value]
     left_hip = landmarks[mp_pose.PoseLandmark.LEFT_HIP.value]
     right_hip = landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value]
+    nose = landmarks[mp_pose.PoseLandmark.NOSE.value]
 
-    # Calculate the average shoulder and hip height
+    # Calculate the average shoulder height
     avg_shoulder_y = (left_shoulder.y + right_shoulder.y) / 2
+
+    # Calculate the average hip height
     avg_hip_y = (left_hip.y + right_hip.y) / 2
 
-    # Determine slouching based on the vertical distance between shoulders and hips
-    if avg_shoulder_y > avg_hip_y - 0.35:  # Adjust threshold as needed
+    # Calculate the shoulder-to-hip vertical distance
+    shoulder_hip_distance = avg_shoulder_y - avg_hip_y
+
+    # Calculate the shoulder-to-nose vertical distance
+    shoulder_nose_distance = avg_shoulder_y - nose.y
+
+    # Determine slouching based on the ratio of shoulder-to-hip and shoulder-to-nose distances
+    slouching_threshold = 0.4  # Adjust threshold as needed
+    if shoulder_nose_distance / shoulder_hip_distance > slouching_threshold:
         return True
     return False
 
