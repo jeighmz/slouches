@@ -4,7 +4,7 @@ import cv2
 smile_path = "docs/smile_review.jpeg"
 joe_path = "docs/240207-joe-biden-ac-906p-c9ad2b.jpeg"
 
-img = cv2.imread(joe_path)
+img = cv2.imread(smile_path)
 detector = FER(mtcnn=True)
 emotions = detector.detect_emotions(img)
 
